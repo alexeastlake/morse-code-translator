@@ -14,32 +14,19 @@ class Translator {
 	}
 	
 	public String translateMorse(String untranslated) {
-		char[] untranslatedChars = untranslated.toCharArray();
-		String translatedString = "";
-		String currentMorseChar = "";
+		String[] morseStrings = untranslated.split(" ");
+		StringBuilder translation = new StringBuilder();
 		
-		for (int i = 0; i < untranslatedChars.length; i++) {
-			char character = untranslatedChars[i];
-
-			if (character == ' ' || i == untranslatedChars.length - 1) {
-				if (i == untranslatedChars.length - 1) {
-					currentMorseChar += untranslatedChars[i];
-				}
-				
-				if (morseToCharacter.containsKey(currentMorseChar)) {
-					translatedString += morseToCharacter.get(currentMorseChar);
-				} else {
-					translatedString += "?";
-				}
-				
-				currentMorseChar = "";
-			} else if (character == '.' || character == '-' || character == '/') {
-				currentMorseChar += untranslatedChars[i];
+		for (String s : morseStrings) {
+			if (morseToCharacter.containsKey(s)) {
+				translation.append(morseToCharacter.get(s));
+			} else {
+				translation.append("?");
 			}
 		}
-		return translatedString;
+		
+		return translation.toString();
 	}
-	
 	
 	/**
 	 * Assigns strings of characters to a morse code key in the morseToCharacter map.
