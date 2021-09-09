@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.Map;
 
 class Translator {
@@ -6,8 +7,37 @@ class Translator {
 	private Map<String, String> characterToMorse;
 	
 	public Translator() {
+		morseToCharacter = new HashMap<String, String>();
+		characterToMorse = new HashMap<String, String>();
 		this.assignMorseToCharacterMap();
 		this.assignCharacterToMorseMap();
+	}
+	
+	public String translateMorse(String untranslated) {
+		char[] untranslatedChars = untranslated.toCharArray();
+		String translatedString = "";
+		String currentMorseChar = "";
+		
+		for (int i = 0; i < untranslatedChars.length; i++) {
+			char character = untranslatedChars[i];
+
+			if (character == ' ' || i == untranslatedChars.length - 1) {
+				if (i == untranslatedChars.length - 1) {
+					currentMorseChar += untranslatedChars[i];
+				}
+				
+				if (morseToCharacter.containsKey(currentMorseChar)) {
+					translatedString += morseToCharacter.get(currentMorseChar);
+				} else {
+					translatedString += "?";
+				}
+				
+				currentMorseChar = "";
+			} else if (character == '.' || character == '-' || character == '/') {
+				currentMorseChar += untranslatedChars[i];
+			}
+		}
+		return translatedString;
 	}
 	
 	
