@@ -13,13 +13,44 @@ class Translator {
 		this.assignCharacterToMorseMap();
 	}
 	
-	public String translateMorse(String untranslated) {
+	/**
+	 * Translates the input String of Morse code into normal text.
+	 *
+	 * @param untranslated String of Morse code
+	 */
+	public String translateFromMorse(String untranslated) {
 		String[] morseStrings = untranslated.split(" ");
 		StringBuilder translation = new StringBuilder();
 		
 		for (String s : morseStrings) {
 			if (morseToCharacter.containsKey(s)) {
 				translation.append(morseToCharacter.get(s));
+			} else {
+				translation.append("?");
+			}
+		}
+		
+		return translation.toString();
+	}
+	
+	/**
+	 * Translates the input String of normal text into Morse code.
+	 * 
+	 * @param untranslated String of normal text
+	 */
+	public String translateToMorse(String untranslated) {
+		char[] untranslatedChars = untranslated.toCharArray();
+		StringBuilder translation = new StringBuilder();
+		
+		for (char c : untranslatedChars) {
+			String cString = Character.toString(c);
+			
+			if (translation.length() != 0) {
+				translation.append(" ");
+			}
+			
+			if (characterToMorse.containsKey(cString)) {
+				translation.append(characterToMorse.get(cString));
 			} else {
 				translation.append("?");
 			}
