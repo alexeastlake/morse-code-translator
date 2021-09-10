@@ -10,7 +10,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 class GUI {
 	
@@ -28,6 +31,14 @@ class GUI {
 	// NormalTextPanel components
 	private JTextArea normalTextArea;
 	
+	// Keeps track of if a text area is currently updating
+	private boolean updating;
+	
+	/**
+	 * Constructs a GUI instance with a given Translator.
+	 *
+	 * @param translator Translator instance to use
+	 */
 	public GUI(Translator translator) {
 		this.translator = translator;
 		
@@ -76,7 +87,86 @@ class GUI {
 		morseTextArea.setLineWrap(true);
 		normalTextArea.setLineWrap(true);
 		
+		// Document listener setups
+		morseTextArea.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				if (!updating) {
+					SwingUtilities.invokeLater(updateNormalTextArea());
+				}
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				if (!updating) {
+					SwingUtilities.invokeLater(updateNormalTextArea());
+				}
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {}
+		});
+		
+		normalTextArea.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				if (!updating) {
+					SwingUtilities.invokeLater(updateMorseTextArea());
+				}
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				if (!updating) {
+					SwingUtilities.invokeLater(updateMorseTextArea());
+				}
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {}
+		});
+		
 		frame.pack();
 		frame.setVisible(true);
+		
+		updating = false;
+	}
+	
+	/**
+	 * Creates a Runnable which updates the morseTextArea with a translation of the content of the normalTextArea.
+	 *
+	 * @return Runnable
+	 */
+	private Runnable updateMorseTextArea() {
+		updating = true;
+		
+		Runnable doUpdate = new Runnable() {
+			@Override
+			public void run() {
+				morseTextArea.setText(translator.translateToMorse(normalTextArea.getText()));
+				updating = false;
+			}
+		};
+		
+		return doUpdate;
+	}
+	
+	/**
+	 * Creates a Runnable which updates the normalTextArea with a translation of the content of the normalTextArea.
+	 *
+	 * @return Runnable
+	 */
+	private Runnable updateNormalTextArea() {
+		updating = true;
+		
+		Runnable doUpdate = new Runnable() {
+			@Override
+			public void run() {
+				normalTextArea.setText(translator.translateFromMorse(morseTextArea.getText()));
+				updating = false;
+			}
+		};
+		
+		return doUpdate;
 	}
 }
