@@ -148,7 +148,12 @@ class GUI {
 		Runnable doUpdate = new Runnable() {
 			@Override
 			public void run() {
-				morseTextArea.setText(translator.translateToMorse(normalTextArea.getText()));
+				if (!normalTextArea.getText().equals("")) {
+					morseTextArea.setText(translator.translateToMorse(normalTextArea.getText()));
+				} else {
+					morseTextArea.setText("");
+				}
+				
 				updating = false;
 			}
 		};
@@ -167,7 +172,12 @@ class GUI {
 		Runnable doUpdate = new Runnable() {
 			@Override
 			public void run() {
-				normalTextArea.setText(translator.translateFromMorse(morseTextArea.getText()));
+				if (!morseTextArea.getText().equals("")) {
+					normalTextArea.setText(translator.translateFromMorse(morseTextArea.getText()));
+				} else {
+					normalTextArea.setText("");
+				}
+				
 				updating = false;
 			}
 		};
