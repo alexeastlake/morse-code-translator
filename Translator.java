@@ -1,11 +1,20 @@
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Translator class containing main functionality for the Morse Code Translator.
+ *
+ * @author alexeastlake
+ */
 class Translator {
 	
+	// Maps holding translations
 	private Map<String, String> morseToCharacter;
 	private Map<String, String> characterToMorse;
 	
+	/**
+	 * Constructs a Translator instance.
+	 */
 	public Translator() {
 		morseToCharacter = new HashMap<String, String>();
 		characterToMorse = new HashMap<String, String>();
@@ -30,16 +39,16 @@ class Translator {
 			}
 		}
 		
-		return translation.toString();
+		return translation.toString().toUpperCase();
 	}
 	
 	/**
 	 * Translates the input String of normal text into Morse code.
-	 * 
+	 *
 	 * @param untranslated String of normal text
 	 */
 	public String translateToMorse(String untranslated) {
-		char[] untranslatedChars = untranslated.toCharArray();
+		char[] untranslatedChars = untranslated.toUpperCase().toCharArray();
 		StringBuilder translation = new StringBuilder();
 		
 		for (char c : untranslatedChars) {

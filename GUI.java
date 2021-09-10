@@ -9,12 +9,16 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+/**
+ * GUI class for the Morse Code Translator.
+ *
+ * @author alexeastlake
+ */
 class GUI {
 	
 	// Translator instance
@@ -112,6 +116,7 @@ class GUI {
 			public void insertUpdate(DocumentEvent e) {
 				if (!updating) {
 					SwingUtilities.invokeLater(updateMorseTextArea());
+					SwingUtilities.invokeLater(normalTextAreaToUpperCase());
 				}
 			}
 
@@ -168,5 +173,23 @@ class GUI {
 		};
 		
 		return doUpdate;
+	}
+	
+	/**
+	 * Creates a Runnable which makes all text in the normalTextArea upper case.
+	 *
+	 * @return Runnable
+	 */
+	private Runnable normalTextAreaToUpperCase() {
+		updating = true;
+		
+		Runnable doUpperCase = new Runnable() {
+			@Override
+			public void run() {
+				normalTextArea.setText(normalTextArea.getText().toUpperCase());
+			}
+		};
+		
+		return doUpperCase;
 	}
 }
