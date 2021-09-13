@@ -4,11 +4,16 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -40,6 +45,7 @@ class GUI {
 	// Menu bar components
 	private JMenuBar menuBar;
 	private JMenu saveMenu;
+	private JMenuItem loadNormalTextMenuItem;
 	private JMenuItem saveMorseMenuItem;
 	private JMenuItem saveNormalTextMenuItem;
 	
@@ -82,15 +88,24 @@ class GUI {
 		// Menu bar setup
 		menuBar = new JMenuBar();
 		saveMenu = new JMenu("Save");
+		loadNormalTextMenuItem = new JMenuItem("Load Normal Text");
 		saveMorseMenuItem = new JMenuItem("Save Morse Code");
 		saveNormalTextMenuItem = new JMenuItem("Save Normal Text");
 		
 		frame.setJMenuBar(menuBar);
 		menuBar.add(saveMenu);
+		saveMenu.add(loadNormalTextMenuItem);
 		saveMenu.add(saveMorseMenuItem);
 		saveMenu.add(saveNormalTextMenuItem);
 		
 		// Menu bar action listeners
+		loadNormalTextMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				loadNormalText();
+			}
+		});
+		
 		saveMorseMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -241,6 +256,38 @@ class GUI {
 		};
 		
 		return doUpperCase;
+	}
+	
+	/**
+	 * Loads a selected .txt file into the normalTextArea.
+	 */
+	private void loadNormalText() {
+		JFileChooser fileChooser = new JFileChooser();
+		int option = fileChooser.showOpenDialog(null);
+		
+		if (option == JFileChooser.APPROVE_OPTION) {
+			File file = fileChooser.getSelectedFile();
+			
+			if (file.getName().contains(".txt")) {
+				try {
+					BufferedReader reader = new BufferedReader(new FileReader(file.getPath()));
+					StringBuilder textBuilder = new StringBuilder();
+					String line = reader.readLine();
+					
+					while (line != null) {
+						textBuilder.append(line);
+						line = reader.readLine();
+					}
+					
+					reader.close();
+					normalTextArea.setText(textBuilder.toString());
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "Loading failed");
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Unsupported file type. Use a .txt file");
+			}
+		}
 	}
 	
 	/**
