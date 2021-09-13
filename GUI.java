@@ -7,6 +7,9 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
@@ -28,6 +31,12 @@ class GUI {
 	private JFrame frame;
 	private JPanel morsePanel;
 	private JPanel normalTextPanel;
+	
+	// Menu bar components
+	private JMenuBar menuBar;
+	private JMenu saveMenu;
+	private JMenuItem saveMorseMenuItem;
+	private JMenuItem saveNormalTextMenuItem;
 	
 	// MorsePanel components
 	private JTextArea morseTextArea;
@@ -64,6 +73,16 @@ class GUI {
 		
 		morsePanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.black));
 		normalTextPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.black));
+		
+		// Menu bar setup
+		menuBar = new JMenuBar();
+		saveMenu = new JMenu("Save");
+		saveMorseMenuItem = new JMenuItem("Save Morse Code...");
+		saveNormalTextMenuItem = new JMenuItem("Save Normal Text...");
+		frame.setJMenuBar(menuBar);
+		menuBar.add(saveMenu);
+		saveMenu.add(saveMorseMenuItem);
+		saveMenu.add(saveNormalTextMenuItem);
 		
 		// Labels
 		JLabel morseLabel = new JLabel("Morse Code");
