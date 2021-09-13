@@ -2,6 +2,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -10,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
@@ -77,12 +82,28 @@ class GUI {
 		// Menu bar setup
 		menuBar = new JMenuBar();
 		saveMenu = new JMenu("Save");
-		saveMorseMenuItem = new JMenuItem("Save Morse Code...");
-		saveNormalTextMenuItem = new JMenuItem("Save Normal Text...");
+		saveMorseMenuItem = new JMenuItem("Save Morse Code");
+		saveNormalTextMenuItem = new JMenuItem("Save Normal Text");
+		
 		frame.setJMenuBar(menuBar);
 		menuBar.add(saveMenu);
 		saveMenu.add(saveMorseMenuItem);
 		saveMenu.add(saveNormalTextMenuItem);
+		
+		// Menu bar action listeners
+		saveMorseMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				saveMorseCode();
+			}
+		});
+		
+		saveNormalTextMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				saveNormalText();
+			}
+		});
 		
 		// Labels
 		JLabel morseLabel = new JLabel("Morse Code");
@@ -220,5 +241,31 @@ class GUI {
 		};
 		
 		return doUpperCase;
+	}
+	
+	/**
+	 * Save the current content of the morseTextArea to a file.
+	 */
+	private void saveMorseCode() {
+		try {
+			PrintWriter output = new PrintWriter("morse.txt");
+			output.println(morseTextArea.getText());
+			output.close();
+		} catch (FileNotFoundException e) {
+			JOptionPane.showMessageDialog(null, "Saving Failed");
+		}
+	}
+	
+	/**
+	 * Save the current content of the normalTextArea to a file.
+	 */
+	private void saveNormalText() {
+		try {
+			PrintWriter output = new PrintWriter("text.txt");
+			output.println(normalTextArea.getText());
+			output.close();
+		} catch (FileNotFoundException e) {
+			JOptionPane.showMessageDialog(null, "Saving Failed");
+		}
 	}
 }
