@@ -291,7 +291,7 @@ class GUI {
 	}
 	
 	/**
-	 * Save the current content of the morseTextArea to a file.
+	 * Save the current content of the morseTextArea to a .txt file.
 	 */
 	private void saveMorseCode() {
 		try {
@@ -304,7 +304,7 @@ class GUI {
 	}
 	
 	/**
-	 * Save the current content of the normalTextArea to a file.
+	 * Save the current content of the normalTextArea to a .txt file.
 	 */
 	private void saveNormalText() {
 		try {

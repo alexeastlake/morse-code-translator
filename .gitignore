@@ -1,1 +1,7 @@
+/bin/
 *.class
+*.DS_Store
+*.classpath
+*.project
+morse.txt
+text.txt
