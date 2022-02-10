@@ -28,10 +28,15 @@ class Translator {
 	 * @param untranslated String of Morse code
 	 */
 	public String translateFromMorse(String untranslated) {
-		String[] morseStrings = untranslated.split(" ");
+		String[] morseStrings = untranslated.replace("\n", " \n ").split(" ");
 		StringBuilder translation = new StringBuilder();
 		
 		for (String s : morseStrings) {
+			if (s.equals("\n")) {
+				translation.append(s);
+				continue;
+			}
+			
 			if (morseToCharacter.containsKey(s)) {
 				translation.append(morseToCharacter.get(s));
 			} else {
@@ -50,11 +55,16 @@ class Translator {
 	public String translateToMorse(String untranslated) {
 		char[] untranslatedChars = untranslated.toUpperCase().toCharArray();
 		StringBuilder translation = new StringBuilder();
+		boolean isNewLine = true;
 		
 		for (char c : untranslatedChars) {
 			String cString = Character.toString(c);
 			
-			if (translation.length() != 0) {
+			if (cString.equals("\n")) {
+				translation.append(cString);
+				isNewLine = true;
+				continue;
+			} else if (translation.length() != 0 && !isNewLine) {
 				translation.append(" ");
 			}
 			
@@ -63,6 +73,8 @@ class Translator {
 			} else {
 				translation.append("?");
 			}
+			
+			isNewLine = false;
 		}
 		
 		return translation.toString();
